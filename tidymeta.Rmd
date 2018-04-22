@@ -1,0 +1,155 @@
+---
+title: "An Introduction to Data Visualization for Meta-Analyses with `tidymeta`"
+author: "Malcolm Barrett"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, fig.height = 7)
+```
+
+`tidymeta` requires the development version of several packages, including `ggplot2`, to function correctly. You can install the required packages for this vignette with the following code:
+
+```{r, eval=FALSE}
+install.packages(c("devtools", "yaml", "ggrepel"))
+library(devtools)
+install_github("r-lib/rlang")
+install_github("malcolmbarrett/tidymeta")
+install_github("malcolmbarrett/mbmisc")
+install_github("tidyverse/ggplot2")
+```
+
+```{r, echo = FALSE, warning = FALSE, message = FALSE}
+library(tidymeta)
+library(ggplot2)
+library(dplyr)
+library(broom)
+```
+
+# Tidy Meta-Analysis
+
+`tidymeta` is a toolkit for working with meta-analyses in R. Currently, it includes a data set, called `iud_cxca`, for a meta-analysis of the relationship between IUD use and cervical cancer. 
+
+```{r}
+iud_cxca
+```
+
+`tidymeta` includes `broom` methods for cleaning meta-analysis results, although it currently only supports the `metafor` package. The `tidy()` function in `broom` puts results into a tidy data frame: one observation per row and one variable per column. 
+
+```{r, message = FALSE}
+library(metafor)
+meta4 <- rma(yi = lnes, sei = selnes, data = iud_cxca)
+tidy(meta4) %>% 
+  as_tibble() # for space
+```
+
+`tidymeta` also includes wrapper functions for working with meta-analysis packages in the context of the tidyverse. The main function for this is `meta_analysis()`, which models and tidies the object, as well as storing the results in the `meta` column to facilitate other analysis.
+
+```{r}
+#  same as above but stores the meta-analysis object
+iud_cxca %>% 
+  meta_analysis(yi = lnes, sei = selnes, slab = study_name)
+```
+
+The benefit of this approach is that you can do meta-analyses with tidy tools in mind. For example, if I want to conduct a sub-group analysis, I can use the `group_by()` function from `dplyr`. Here, I'm grouping by `group`, a variable with information about study design.
+
+```{r}
+ma <- iud_cxca %>% 
+  group_by(group) %>% 
+  meta_analysis(yi = lnes, sei = selnes, slab = study_name, exponentiate = TRUE)
+
+ma
+```
+
+You can also do sensitivy analyses and cumulative analyses with `sensitivity()` and `cumulative()`.
+
+# Visualization for Meta-Analysis
+
+`tidymeta` includes functionality for working with results in `ggplot2`, including meta-analysis specific geoms (such as `geom_funnel()`) and quick plots for common visualizations.
+
+## Forest plots
+
+With tidy data, most data visualizations for meta-analyses are easy to build from the ground up. Nevertheless, `tidymeta` has several quick plot functions to make the process easier. `forest_plot()` takes a tidied meta-analysis and plots the effect sizes.
+
+```{r}
+fp <- ma %>% 
+  forest_plot(group = group)
+
+fp
+```
+
+Because the results are still `ggplot2` objects, it's easy to make changes to the plot to your liking.
+
+```{r}
+fp <- fp + 
+  scale_x_log() + 
+  theme(axis.text.y = element_text(face = c("bold", rep("plain", 21))))
+
+fp
+```
+
+For better or worse, meta-analyses often have forest plots that include a lot of text about the studies in the form of a table. `text_table()` makes it easy to create a plot of text. `text_table()` quickly plots tables of text. Here, we'll format the OR and CI for the estimates using the `est_ci()` function from the `mbmisc` package.
+
+```{r}
+library(mbmisc)
+ma %>% 
+  mutate(est_95ci = est_ci(estimate, conf.low, conf.high, descriptor = "")) %>% 
+  text_table(group = group, "OR (95% CI)" = est_95ci)
+```
+
+Since we already have some of this information in the forest plot, we'll remove the y-axis and group labels. Then, we can use the `patchwork` package to combine the two easily.
+
+```{r}
+library(patchwork)
+txttbl <- ma %>% 
+  mutate(est_95ci = est_ci(estimate, conf.low, conf.high, descriptor = "")) %>% 
+  text_table(group = group, "OR (95% CI)" = est_95ci, show_y_facets = FALSE, show_y_axis = FALSE)
+
+fp + txttbl
+```
+
+
+## Funnel plots
+
+Other plots work just as easily. Although we can use the `geom_funnel()` function manually, a funnel plot can be made just as easily with `funnel_plot()`. Note that because this is an odds ratio, we need to treat to transform the funnel lines with `log_summary = TRUE`.
+
+```{r fig.height=5}
+ma %>% 
+  funnel_plot(log_summary = TRUE, col = group, shape = group, size = 3)
+```
+```{r}
+library(ggrepel)
+
+ma %>% 
+  mutate(se_label = ifelse(std.error > 1, study, "")) %>% 
+  funnel_plot(log_summary = TRUE, col = group, shape = group, size = 3) + 
+  geom_label_repel(aes(label = se_label), col = "black")  
+```
+
+
+## Influence plots
+
+You can use `sensitvity()` to assess the effect of leaving a study out in the summary estimate (the default) or comparing groups (by using `group_by()` first). You can plot the results with `influence_plot()`.
+
+```{r, fig.width=5.5}
+ma %>% 
+  sensitivity(exponentiate = TRUE) %>% 
+  influence_plot()
+```
+
+
+## Cumulative plots
+
+A different way to approach sensitivy analysis is to order the studies in a given way and assess the cumulative effect on the summary estimate. For instance, let's order the analysis by study weight using `arrange()` from `dplyr`:
+
+```{r}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE) %>% 
+  cumulative_plot(sum_lines = FALSE)
+```
+

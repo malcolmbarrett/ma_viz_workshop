@@ -1,0 +1,657 @@
+---
+title: "<span style='color:#474747'>Introduction to Data Visualization for Meta-Analysis</span>"
+subtitle: "<span style='color:#474747'>with tidymeta and ggplot2</span>"
+author: "<span style='color:#474747'>Malcolm Barrett</span>"
+date: "<span style='color:#474747'>04/23/2018</span>"
+output:
+  xaringan::moon_reader:
+    css: ["default", "my-theme.css", "metrop-fonts.css"]
+    lib_dir: libs
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, fig.align = "center", dpi = 320)
+library(mbmisc)
+```
+
+class: inverse-ns, center
+
+# Data Visualization with R
+## `r font_col("ggplot2", "#E69F00")` and the `r font_col("tidyverse", "#E69F00")` are ideal for `r font_col("scientific communication", "#56B4E9")`
+
+---
+class: inverse-ns, center
+
+# Data Visualization with R
+## `r font_col("ggplot2 and the tidyverse are ideal for scientific communication", "#6C7B7F")`
+## `r font_col("Better plots", "#E69F00")` are `r font_col("better communication", "#56B4E9")`
+
+---
+class: inverse-ns, center
+
+# Data Visualization with R
+## `r font_col("ggplot2 and the tidyverse are ideal for scientific communication", "#6C7B7F")`
+## `r font_col("Better plots are better communication", "#6C7B7F")`
+## `r font_col("tidymeta", "#E69F00")` makes it easy to manipulate and plot meta-analysis results
+
+---
+
+# Introduction to the Data 
+## What's the impact of `r font_col("intrauterine device (IUD)", "#E69F00")` use on risk of  `r font_col("cervical cancer", "#56B4E9")`?
+
+---
+
+# Introduction to the Data 
+## `r font_col("What's the impact of intrauterine device (IUD) use on risk of  cervical cancer?", "#E5E5E5")`
+## 16 studies: 4,945 cases and 7,537 controls
+
+---
+
+# Introduction to the Data 
+## `r font_col("What's the impact of intrauterine device (IUD) use on risk of  cervical cancer?", "#E5E5E5")`
+## `r font_col("16 studies: 4,945 cases and 7,537 controls", "#E5E5E5")`
+## Women who used IUDs were at a `r font_col("third less risk", "#E69F00")` than those who didn't (OR 0.64)
+
+---
+
+```{r}
+library(tidymeta)
+{{iud_cxca}}
+```
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `r font_col("<code>study_name</code>", "#E69F00")` = `r font_col("Author + study year", "#56B4E9")`
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `r font_col("<code>lnes</code>", "#E69F00")` = `r font_col("ln(Odds Ratio)", "#56B4E9")`
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `r font_col("<code>selnes</code>", "#E69F00")` = `r font_col("SE of ln(OR)", "#56B4E9")`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## `r font_col("<code>group</code>", "#E69F00")` = `r font_col("Study design", "#56B4E9")`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## `r font_col("<code>pub_year</code>", "#E69F00")` = `r font_col("Publication year", "#56B4E9")`
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## `r font_col("Forest Plot", "#E69F00")`
+
+---
+
+## `forest_plot()`
+
+```{r echo=FALSE, out.width="60%"}
+library(dplyr)
+library(ggplot2)
+ma <- iud_cxca %>% 
+  group_by(group) %>% 
+  meta_analysis(yi = lnes, sei = selnes, slab = study_name, exponentiate = TRUE)
+ma %>% 
+  forest_plot(group = group)
+```
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## `r font_col("Forest Plot", "#6C7B7F")`
+## `r font_col("Funnel Plot", "#E69F00")`
+
+---
+## `funnel_plot()`
+```{r echo=FALSE, out.width="75%", fig.height=6}
+ma %>% 
+  funnel_plot(log_summary = TRUE, col = group, shape = group, size = 3)
+```
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## `r font_col("Forest Plot", "#6C7B7F")`
+## `r font_col("Funnel Plot", "#6C7B7F")`
+## `r font_col("Influence/Sensitivity Plot", "#E69F00")`
+
+---
+## `influence_plot()`
+```{r echo=FALSE, out.width="60%"}
+ma %>% 
+  sensitivity(exponentiate = TRUE) %>% 
+  influence_plot()
+```
+
+---
+
+
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## `r font_col("Forest Plot", "#6C7B7F")`
+## `r font_col("Funnel Plot", "#6C7B7F")`
+## `r font_col("Influence/Sensitivity Plot", "#6C7B7F")`
+## `r font_col("Cumulative Plot", "#E69F00")`
+
+---
+## `cumulative_plot()`
+```{r echo=FALSE, out.width="60%"}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE) %>% 
+  cumulative_plot(sum_lines = FALSE)
+```
+
+
+---
+
+class: inverse, center, middle
+
+# A Crash Course in the Tidyverse
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## Based on a Grammar of Graphics
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## `r font_col("Based on a Grammar of Graphics", "#E5E5E5")`
+## Data is mapped to aesthetics; Statistics and plot are linked
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## `r font_col("Based on a Grammar of Graphics", "#E5E5E5")`
+## `r font_col("Data is mapped to aesthetics; Statistics and plot are linked", "#E5E5E5")`
+## Sensible defaults; Infinitely extensible
+
+---
+
+```{r fig.height=4}
+library(ggplot2)
+p <- ggplot(iud_cxca, aes(case_num + control_num, lnes, color = group))
+```
+---
+
+```{r fig.height=4}
+library(ggplot2)
+p <- p + geom_point()
+p
+```
+
+---
+
+```{r fig.height=4}
+p <- p + geom_smooth(method = "lm", se = FALSE)
+p
+```
+
+---
+
+```{r fig.height=4}
+p + 
+  labs(title = "The Effect of Sample Size on Estimate",
+      x = "Sample Size",
+      y = "ln(Odds Ratio)") + 
+  scale_color_discrete(name = "Study Design") +
+  theme_minimal() + 
+  theme(text = element_text(size = 16))
+```
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)</div>
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)</div>
+### .medium[Each `r font_col("column", "#E69F00")` is a single `r font_col("variable", "#56B4E9")`]
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)</div>
+### `r font_col(".medium[Each column is a single variable]", "#E5E5E5")`
+### .medium[Each `r font_col("row", "#E69F00")` is a single `r font_col("observation", "#56B4E9")`]
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)</div>
+### `r font_col(".medium[Each column is a single variable]", "#E5E5E5")`
+### `r font_col(".medium[Each row is a single observation]", "#E5E5E5")`
+### .medium[Each `r font_col("cell", "#E69F00")` is a `r font_col("value", "#56B4E9")`]
+
+```{r include = FALSE}
+magick::image_append(c(
+  magick::image_read("http://hexb.in/hexagons/dplyr.png"), 
+  magick::image_blank(width = 181, height = 75), 
+  magick::image_read("http://hexb.in/hexagons/broom.png")), 
+  stack = TRUE) %>% 
+  magick::image_write("broom_dplyr_hex.png")
+```
+
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%>%`
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `r font_col("<code>%>%</code>", "#E69F00")`: `r font_col("passes", "#56B4E9")` the results of one function to the next
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%>%`
+### `r font_col("<code>mutate()</code>", "#E69F00")`: `r font_col("changes", "#56B4E9")` or creates a new variable
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%>%`
+### `mutate()`
+### `r font_col("<code>arrange()</code>", "#E69F00")`: `r font_col("sorts", "#56B4E9")` a data set by a variable
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%>%`
+### `mutate()`
+### `arrange()`
+### `r font_col("<code>group_by()</code>", "#E69F00")`: `r font_col("groups", "#56B4E9")` a data set by a variable
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%>%`
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### `r font_col("<code>tidy()</code>", "#E69F00")`: `r font_col("tidies", "#56B4E9")` statistical results
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+
+---
+# `r font_col("Tidy Meta-Analysis", "#E69F00")`
+## `meta_analysis()`
+
+
+---
+
+# `r font_col("Tidy Meta-Analysis", "#E69F00")`
+## `meta_analysis()`
+
+```{r}
+ma <- iud_cxca %>% 
+  group_by(group) %>% 
+  meta_analysis(yi = lnes, sei = selnes, slab = study_name, exponentiate = TRUE)
+
+ma
+```
+
+---
+# `r font_col("Forest Plot", "#E69F00")`
+## `forest_plot()`
+
+---
+# `r font_col("Forest Plot", "#E69F00")`
+## `forest_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  forest_plot(group = group)
+```
+
+---
+# `r font_col("Forest Plot", "#E69F00")`
+## `forest_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  forest_plot(group = group)
+```
+
+## `text_table()`
+
+---
+# `r font_col("Forest Plot", "#E69F00")`
+## `forest_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  forest_plot(group = group)
+```
+
+## `text_table()`
+```{r eval=FALSE}
+library(mbmisc)
+ma %>% 
+  text_table(group = group, "Weights" = weight)
+```
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-left[
+## `r font_col("Join", "#E69F00")` ggplots quickly and accurately
+]
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-left[
+## `r font_col("Join", "#E69F00")` ggplots quickly and accurately
+```{r eval=FALSE}
+library(patchwork)
+
+forest_plot() + text_table()
+```
+]
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+# `r font_col("Funnel Plot", "#E69F00")`
+## `funnel_plot()`
+
+---
+# `r font_col("Funnel Plot", "#E69F00")`
+## `funnel_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  funnel_plot(log_summary = TRUE)
+```
+
+---
+# `r font_col("Influence Plot", "#E69F00")`
+## `sensitivity()`
+
+---
+# `r font_col("Influence Plot", "#E69F00")`
+## `sensitivity()`
+
+```{r eval=FALSE}
+ma %>% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+---
+# `r font_col("Influence Plot", "#E69F00")`
+## `sensitivity()`
+
+```{r eval=FALSE}
+ma %>% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+## `influence_plot()`
+
+---
+
+# `r font_col("Influence Plot", "#E69F00")`
+## `sensitivity()`
+
+```{r eval=FALSE}
+ma %>% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+## `influence_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  sensitivity(exponentiate = TRUE) %>% 
+  influence_plot()
+```
+
+---
+# `r font_col("Cumulative Plot", "#E69F00")`
+## `cumulative()`
+
+---
+# `r font_col("Cumulative Plot", "#E69F00")`
+## `cumulative()`
+
+```{r eval=FALSE}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE)
+```
+
+---
+
+# `r font_col("Cumulative Plot", "#E69F00")`
+## `cumulative()`
+
+```{r eval=FALSE}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE)
+```
+
+## `cumulative_plot()`
+
+---
+
+# `r font_col("Cumulative Plot", "#E69F00")`
+## `cumulative()`
+
+```{r eval=FALSE}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE)
+```
+
+## `cumulative_plot()`
+
+```{r eval=FALSE}
+ma %>% 
+  arrange(desc(weight)) %>% 
+  cumulative(exponentiate = TRUE) %>% 
+  cumulative_plot(sum_lines = FALSE)
+```
+
+---
+
+class: inverse, center
+
+# tidymeta
+
+--
+## `meta_analysis()`
+
+--
+## `forest_plot()`/`text_table()`
+
+--
+## `sensitivity()`/`influence_plot()`
+
+--
+## `cumulative()`/`cumulative_plot()`
+
+---
+class: inverse, center
+
+# Resources
+## [R for Data Science](http://r4ds.had.co.nz/): free online and in-print book
+## [DataCamp](https://www.datacamp.com/): ggplot2 courses and tidyverse courses
+## the [ggplot2 book](https://smile.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_2?ie=UTF8&qid=1524362742&sr=8-2&keywords=ggplot2)
+
+---
+
+class: inverse, center, middle
+
+![](https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif)
+
+## `r icon::fa("github")` [github.com/malcolmbarrett/tidymeta](https://github.com/malcolmbarrett/tidymeta)
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).

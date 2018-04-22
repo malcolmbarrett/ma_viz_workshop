@@ -1,0 +1,45 @@
+---
+title: "Installing R and R Packages"
+author: "Malcolm Barrett"
+date: "4/21/2018"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Installing R
+
+There are several ways to install and use R. Here are two I recommend.
+
+### On the Cloud
+
+1. Go to [rstudio.cloud](https://rstudio.cloud) 
+1. Sign up for an account
+1. Click on the "Projects" pane
+1. Click "Create Project"
+
+This will open up a clean session of Rstudio directly in your browser.
+
+### On your computer
+
+To use R on your computer, you need to download R itself. I also recommend downloading Rstudio, a development environment for R that makes it a lot easier to use.
+
+1. Download and install R from [cloud.r-project.org/](https://cloud.r-project.org/)
+1. Download and install Rstudio Desktop from [rstudio.com](https://www.rstudio.com/products/rstudio/download/#download)
+1. Open Rstudio (**not R!**)
+
+## Installing R packages
+
+`tidymeta` requires the development version of several packages, including `ggplot2`, to function correctly. You can install the required packages for this vignette with the following code, which you should do even if you have `ggplot2` and friends installed already:
+
+
+```{r, eval=FALSE}
+install.packages(c("devtools", "yaml", "ggrepel"))
+library(devtools)
+install_github("r-lib/rlang")
+install_github("malcolmbarrett/tidymeta")
+install_github("malcolmbarrett/mbmisc")
+install_github("tidyverse/ggplot2")
+```

@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction to Data Visualization for Meta-Analysis</title>
+    <meta charset="utf-8">
+    <meta name="author" content="Malcolm Barrett" />
+    <meta name="date" content="2018-04-23" />
+    <link href="libs/remark-css/default.css" rel="stylesheet" />
+    <link href="libs/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="my-theme.css" type="text/css" />
+    <link rel="stylesheet" href="metrop-fonts.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# <span style="color:#474747">Introduction to Data Visualization for Meta-Analysis</span>
+## <span style="color:#474747">with tidymeta and ggplot2</span>
+### <span style="color:#474747">Malcolm Barrett</span>
+### <span style="color:#474747">04/23/2018</span>
+
+---
+
+
+
+
+class: inverse-ns, center
+
+# Data Visualization with R
+## &lt;span style = 'color:#E69F00'&gt;ggplot2&lt;/span&gt; and the &lt;span style = 'color:#E69F00'&gt;tidyverse&lt;/span&gt; are ideal for &lt;span style = 'color:#56B4E9'&gt;scientific communication&lt;/span&gt;
+
+---
+class: inverse-ns, center
+
+# Data Visualization with R
+## &lt;span style = 'color:#6C7B7F'&gt;ggplot2 and the tidyverse are ideal for scientific communication&lt;/span&gt;
+## &lt;span style = 'color:#E69F00'&gt;Better plots&lt;/span&gt; are &lt;span style = 'color:#56B4E9'&gt;better communication&lt;/span&gt;
+
+---
+class: inverse-ns, center
+
+# Data Visualization with R
+## &lt;span style = 'color:#6C7B7F'&gt;ggplot2 and the tidyverse are ideal for scientific communication&lt;/span&gt;
+## &lt;span style = 'color:#6C7B7F'&gt;Better plots are better communication&lt;/span&gt;
+## &lt;span style = 'color:#E69F00'&gt;tidymeta&lt;/span&gt; makes it easy to manipulate and plot meta-analysis results
+
+---
+
+# Introduction to the Data 
+## What's the impact of &lt;span style = 'color:#E69F00'&gt;intrauterine device (IUD)&lt;/span&gt; use on risk of  &lt;span style = 'color:#56B4E9'&gt;cervical cancer&lt;/span&gt;?
+
+---
+
+# Introduction to the Data 
+## &lt;span style = 'color:#E5E5E5'&gt;What's the impact of intrauterine device (IUD) use on risk of  cervical cancer?&lt;/span&gt;
+## 16 studies: 4,945 cases and 7,537 controls
+
+---
+
+# Introduction to the Data 
+## &lt;span style = 'color:#E5E5E5'&gt;What's the impact of intrauterine device (IUD) use on risk of  cervical cancer?&lt;/span&gt;
+## &lt;span style = 'color:#E5E5E5'&gt;16 studies: 4,945 cases and 7,537 controls&lt;/span&gt;
+## Women who used IUDs were at a &lt;span style = 'color:#E69F00'&gt;third less risk&lt;/span&gt; than those who didn't (OR 0.64)
+
+---
+
+
+```r
+library(tidymeta)
+*iud_cxca
+```
+
+```
+## # A tibble: 16 x 26
+##    study_id study_name    author    es    l95   u95    lnes  lnl95   lnu95
+##       &lt;int&gt; &lt;chr&gt;         &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+##  1        1 Roura, 2016   Roura  0.600 0.300  1.20  -0.511  -1.20   0.182 
+##  2        2 Lassise, 1991 Lassi… 0.800 0.500  1.20  -0.223  -0.693  0.182 
+##  3        3 Li, 2000      Li     0.890 0.730  1.08  -0.117  -0.315  0.0770
+##  4        4 Shields, 2004 Shiel… 0.500 0.300  0.820 -0.693  -1.20  -0.198 
+##  5        5 Castellsague… Caste… 0.630 0.380  1.06  -0.462  -0.968  0.0583
+##  6        6 Castellsague… Caste… 0.450 0.300  0.670 -0.799  -1.20  -0.400 
+##  7        7 Brinton, 1990 Brint… 0.690 0.500  0.900 -0.371  -0.693 -0.105 
+##  8        8 Parazzini, 1… Paraz… 0.600 0.300  1.10  -0.511  -1.20   0.0953
+##  9        9 Williams, 19… Willi… 1.00  0.600  1.60   0.     -0.511  0.470 
+## 10       10 Hammouda, 20… Hammo… 0.300 0.100  0.500 -1.20   -2.30  -0.693 
+## 11       11 Castellsague… Caste… 1.08  0.370  3.20   0.0770 -0.994  1.16  
+## 12       12 Castellsague… Caste… 0.340 0.0500 2.56  -1.08   -3.00   0.940 
+## 13       13 Castellsague… Caste… 0.870 0.340  2.23  -0.139  -1.08   0.802 
+## 14       14 Castellsague… Caste… 0.490 0.190  1.23  -0.713  -1.66   0.207 
+## 15       15 Castellsague… Caste… 0.240 0.0900 0.660 -1.43   -2.41  -0.416 
+## 16       16 Celentano, 1… Celen… 0.500 0.170  1.47  -0.693  -1.77   0.385 
+## # ... with 17 more variables: selnes &lt;dbl&gt;, group &lt;fct&gt;, case_num &lt;dbl&gt;,
+## #   control_num &lt;dbl&gt;, start_recruit &lt;dbl&gt;, stop_recruit &lt;dbl&gt;,
+## #   pub_year &lt;dbl&gt;, numpap &lt;dbl&gt;, ses &lt;dbl&gt;, gravidity &lt;dbl&gt;,
+## #   lifetimepart &lt;dbl&gt;, coitarche &lt;dbl&gt;, hpvstatus &lt;dbl&gt;, smoking &lt;dbl&gt;,
+## #   location &lt;chr&gt;, aair &lt;dbl&gt;, hpvrate &lt;dbl&gt;
+```
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;study_name&lt;/code&gt;&lt;/span&gt; = &lt;span style = 'color:#56B4E9'&gt;Author + study year&lt;/span&gt;
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;lnes&lt;/code&gt;&lt;/span&gt; = &lt;span style = 'color:#56B4E9'&gt;ln(Odds Ratio)&lt;/span&gt;
+
+## `selnes`
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;selnes&lt;/code&gt;&lt;/span&gt; = &lt;span style = 'color:#56B4E9'&gt;SE of ln(OR)&lt;/span&gt;
+
+## `group`
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;group&lt;/code&gt;&lt;/span&gt; = &lt;span style = 'color:#56B4E9'&gt;Study design&lt;/span&gt;
+
+## `pub_year`
+
+---
+
+# Five variables from `iud_cxca` we'll use
+
+## `study_name`
+
+## `lnes`
+
+## `selnes`
+
+## `group`
+
+## &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;pub_year&lt;/code&gt;&lt;/span&gt; = &lt;span style = 'color:#56B4E9'&gt;Publication year&lt;/span&gt;
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## &lt;span style = 'color:#E69F00'&gt;Forest Plot&lt;/span&gt;
+
+---
+
+## `forest_plot()`
+
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-2-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## &lt;span style = 'color:#6C7B7F'&gt;Forest Plot&lt;/span&gt;
+## &lt;span style = 'color:#E69F00'&gt;Funnel Plot&lt;/span&gt;
+
+---
+## `funnel_plot()`
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-3-1.png" width="75%" style="display: block; margin: auto;" /&gt;
+
+---
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## &lt;span style = 'color:#6C7B7F'&gt;Forest Plot&lt;/span&gt;
+## &lt;span style = 'color:#6C7B7F'&gt;Funnel Plot&lt;/span&gt;
+## &lt;span style = 'color:#E69F00'&gt;Influence/Sensitivity Plot&lt;/span&gt;
+
+---
+## `influence_plot()`
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-4-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+class: inverse-ns, center, middle
+
+# Meta-Analysis Plot Types
+## &lt;span style = 'color:#6C7B7F'&gt;Forest Plot&lt;/span&gt;
+## &lt;span style = 'color:#6C7B7F'&gt;Funnel Plot&lt;/span&gt;
+## &lt;span style = 'color:#6C7B7F'&gt;Influence/Sensitivity Plot&lt;/span&gt;
+## &lt;span style = 'color:#E69F00'&gt;Cumulative Plot&lt;/span&gt;
+
+---
+## `cumulative_plot()`
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-5-1.png" width="60%" style="display: block; margin: auto;" /&gt;
+
+
+---
+
+class: inverse, center, middle
+
+# A Crash Course in the Tidyverse
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## Based on a Grammar of Graphics
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## &lt;span style = 'color:#E5E5E5'&gt;Based on a Grammar of Graphics&lt;/span&gt;
+## Data is mapped to aesthetics; Statistics and plot are linked
+
+---
+background-image: url(http://hexb.in/hexagons/ggplot2.png)
+background-position: 90% 10%
+
+# ggplot2: Elegant Data Visualizations in R
+
+## &lt;span style = 'color:#E5E5E5'&gt;Based on a Grammar of Graphics&lt;/span&gt;
+## &lt;span style = 'color:#E5E5E5'&gt;Data is mapped to aesthetics&lt;/span&gt;
+## Sensible defaults; Infinitely extensible
+
+---
+
+
+```r
+library(ggplot2)
+p &lt;- ggplot(iud_cxca, aes(case_num + control_num, lnes, color = group))
+```
+---
+
+
+```r
+library(ggplot2)
+p &lt;- p + geom_point()
+p
+```
+
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+p &lt;- p + geom_smooth(method = "lm", se = FALSE)
+p
+```
+
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+
+```r
+p + 
+  labs(title = "The Effect of Sample Size on Estimate",
+      x = "Sample Size",
+      y = "ln(Odds Ratio)") + 
+  scale_color_discrete(name = "Study Design") +
+  theme_minimal() + 
+  theme(text = element_text(size = 16))
+```
+
+&lt;img src="ma_workshop_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)&lt;/div&gt;
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)&lt;/div&gt;
+### .medium[Each &lt;span style = 'color:#E69F00'&gt;column&lt;/span&gt; is a single &lt;span style = 'color:#56B4E9'&gt;variable&lt;/span&gt;]
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)&lt;/div&gt;
+### &lt;span style = 'color:#E5E5E5'&gt;.medium[Each column is a single variable]&lt;/span&gt;
+### .medium[Each &lt;span style = 'color:#E69F00'&gt;row&lt;/span&gt; is a single &lt;span style = 'color:#56B4E9'&gt;observation&lt;/span&gt;]
+
+---
+
+# Tidy Data is Easier to Plot
+![](http://garrettgman.github.io/images/tidy-1.png)&lt;/div&gt;
+### &lt;span style = 'color:#E5E5E5'&gt;.medium[Each column is a single variable]&lt;/span&gt;
+### &lt;span style = 'color:#E5E5E5'&gt;.medium[Each row is a single observation]&lt;/span&gt;
+### .medium[Each &lt;span style = 'color:#E69F00'&gt;cell&lt;/span&gt; is a &lt;span style = 'color:#56B4E9'&gt;value&lt;/span&gt;]
+
+
+
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%&gt;%`
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;%&gt;%&lt;/code&gt;&lt;/span&gt;: &lt;span style = 'color:#56B4E9'&gt;passes&lt;/span&gt; the results of one function to the next
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%&gt;%`
+### &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;mutate()&lt;/code&gt;&lt;/span&gt;: &lt;span style = 'color:#56B4E9'&gt;changes&lt;/span&gt; or creates a new variable
+### `arrange()`
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%&gt;%`
+### `mutate()`
+### &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;arrange()&lt;/code&gt;&lt;/span&gt;: &lt;span style = 'color:#56B4E9'&gt;sorts&lt;/span&gt; a data set by a variable
+### `group_by()`
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%&gt;%`
+### `mutate()`
+### `arrange()`
+### &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;group_by()&lt;/code&gt;&lt;/span&gt;: &lt;span style = 'color:#56B4E9'&gt;groups&lt;/span&gt; a data set by a variable
+### `tidy()` 
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+---
+
+# Our Tidy Tools
+
+.pull-left[
+### `%&gt;%`
+### `mutate()`
+### `arrange()`
+### `group_by()`
+### &lt;span style = 'color:#E69F00'&gt;&lt;code&gt;tidy()&lt;/code&gt;&lt;/span&gt;: &lt;span style = 'color:#56B4E9'&gt;tidies&lt;/span&gt; statistical results
+]
+
+.pull-right[
+![](broom_dplyr_hex.png)
+]
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Tidy Meta-Analysis&lt;/span&gt;
+## `meta_analysis()`
+
+
+---
+
+# &lt;span style = 'color:#E69F00'&gt;Tidy Meta-Analysis&lt;/span&gt;
+## `meta_analysis()`
+
+
+```r
+ma &lt;- iud_cxca %&gt;% 
+  group_by(group) %&gt;% 
+  meta_analysis(yi = lnes, sei = selnes, slab = study_name, exponentiate = TRUE)
+
+ma
+```
+
+```
+## # A tibble: 21 x 11
+##    group    study     type  estimate std.error statistic  p.value conf.low
+##    &lt;fct&gt;    &lt;chr&gt;     &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+##  1 Nested … Roura, 2… study    0.600    0.354     -1.44  NA          0.300
+##  2 Nested … Subgroup… summ…    0.600    0.354     -1.44   0.149      0.300
+##  3 Populat… Lassise,… study    0.800    0.223     -0.999 NA          0.516
+##  4 Populat… Li, 2000  study    0.890    0.0999    -1.17  NA          0.732
+##  5 Populat… Shields,… study    0.500    0.257     -2.70  NA          0.302
+##  6 Populat… Castells… study    0.630    0.262     -1.77  NA          0.377
+##  7 Populat… Castells… study    0.450    0.205     -3.90  NA          0.301
+##  8 Populat… Subgroup… summ…    0.655    0.146     -2.90   0.00374    0.492
+##  9 Clinic-… Brinton,… study    0.690    0.150     -2.47  NA          0.514
+## 10 Clinic-… Parazzin… study    0.600    0.331     -1.54  NA          0.313
+## # ... with 11 more rows, and 3 more variables: conf.high &lt;dbl&gt;,
+## #   meta &lt;list&gt;, weight &lt;dbl&gt;
+```
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Forest Plot&lt;/span&gt;
+## `forest_plot()`
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Forest Plot&lt;/span&gt;
+## `forest_plot()`
+
+
+```r
+ma %&gt;% 
+  forest_plot(group = group)
+```
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Forest Plot&lt;/span&gt;
+## `forest_plot()`
+
+
+```r
+ma %&gt;% 
+  forest_plot(group = group)
+```
+
+## `text_table()`
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Forest Plot&lt;/span&gt;
+## `forest_plot()`
+
+
+```r
+ma %&gt;% 
+  forest_plot(group = group)
+```
+
+## `text_table()`
+
+```r
+library(mbmisc)
+ma %&gt;% 
+  text_table(group = group, "Weights" = weight)
+```
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-left[
+## &lt;span style = 'color:#E69F00'&gt;Join&lt;/span&gt; ggplots quickly and accurately
+]
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+
+# patchwork: Compose ggplots
+
+.pull-left[
+## &lt;span style = 'color:#E69F00'&gt;Join&lt;/span&gt; ggplots quickly and accurately
+
+```r
+library(patchwork)
+
+forest_plot() + text_table()
+```
+]
+
+.pull-right[
+![](https://raw.githubusercontent.com/thomasp85/patchwork/master/man/figures/logo.png)
+]
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Funnel Plot&lt;/span&gt;
+## `funnel_plot()`
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Funnel Plot&lt;/span&gt;
+## `funnel_plot()`
+
+
+```r
+ma %&gt;% 
+  funnel_plot(log_summary = TRUE)
+```
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Influence Plot&lt;/span&gt;
+## `sensitivity()`
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Influence Plot&lt;/span&gt;
+## `sensitivity()`
+
+
+```r
+ma %&gt;% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Influence Plot&lt;/span&gt;
+## `sensitivity()`
+
+
+```r
+ma %&gt;% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+## `influence_plot()`
+
+---
+
+# &lt;span style = 'color:#E69F00'&gt;Influence Plot&lt;/span&gt;
+## `sensitivity()`
+
+
+```r
+ma %&gt;% 
+  sensitivity(exponentiate = TRUE) 
+```
+
+## `influence_plot()`
+
+
+```r
+ma %&gt;% 
+  sensitivity(exponentiate = TRUE) %&gt;% 
+  influence_plot()
+```
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Cumulative Plot&lt;/span&gt;
+## `cumulative()`
+
+---
+# &lt;span style = 'color:#E69F00'&gt;Cumulative Plot&lt;/span&gt;
+## `cumulative()`
+
+
+```r
+ma %&gt;% 
+  arrange(desc(weight)) %&gt;% 
+  cumulative(exponentiate = TRUE)
+```
+
+---
+
+# &lt;span style = 'color:#E69F00'&gt;Cumulative Plot&lt;/span&gt;
+## `cumulative()`
+
+
+```r
+ma %&gt;% 
+  arrange(desc(weight)) %&gt;% 
+  cumulative(exponentiate = TRUE)
+```
+
+## `cumulative_plot()`
+
+---
+
+# &lt;span style = 'color:#E69F00'&gt;Cumulative Plot&lt;/span&gt;
+## `cumulative()`
+
+
+```r
+ma %&gt;% 
+  arrange(desc(weight)) %&gt;% 
+  cumulative(exponentiate = TRUE)
+```
+
+## `cumulative_plot()`
+
+
+```r
+ma %&gt;% 
+  arrange(desc(weight)) %&gt;% 
+  cumulative(exponentiate = TRUE) %&gt;% 
+  cumulative_plot(sum_lines = FALSE)
+```
+
+---
+
+class: inverse, center
+
+# tidymeta
+
+--
+## `meta_analysis()`
+
+--
+## `forest_plot()`/`text_table()`
+
+--
+## `sensitivity()`/`influence_plot()`
+
+--
+## `cumulative()`/`cumulative_plot()`
+
+---
+class: inverse, center
+
+# Resources
+## [R for Data Science](http://r4ds.had.co.nz/): free online and in-print book
+## [DataCamp](https://www.datacamp.com/): ggplot2 courses and tidyverse courses
+## the [ggplot2 book](https://smile.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_2?ie=UTF8&amp;qid=1524362742&amp;sr=8-2&amp;keywords=ggplot2)
+
+---
+
+class: inverse, center, middle
+
+![](https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif)
+
+## <i class="fa  fa-github "></i> [github.com/malcolmbarrett/tidymeta](https://github.com/malcolmbarrett/tidymeta)
+
+Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
+    </textarea>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"highlightLines": true,
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function() {
+  var d = document, s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})();</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
