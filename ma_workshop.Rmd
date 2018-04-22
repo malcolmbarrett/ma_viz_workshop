@@ -653,5 +653,6 @@ class: inverse, center, middle
 ![](https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif)
 
 ## `r icon::fa("github")` [github.com/malcolmbarrett/tidymeta](https://github.com/malcolmbarrett/tidymeta)
+## `r icon::fa("github")` [github.com/malcolmbarrett/ma_viz_workshop](https://github.com/malcolmbarrett/ma_viz_workshop)
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).

@@ -1,0 +1,21 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# PM 605: Data Visualization for Meta-Analysis Workshop
+
+This repository includes files for the Spring 2018 workshop in data visualization for PM 605: Systematic Review and Meta-Analysis.
+
+## Resources: 
+1. Installing R and Rstudio: [PDF](r_instructions.pdf)
+1. Slides: [HTML](ma_workshop.html), [Rmarkdown](ma_workshop.Rmd)
+1. Tutorial: [PDF](tidymeta.pdf)

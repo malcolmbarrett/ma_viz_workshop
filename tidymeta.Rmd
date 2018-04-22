@@ -32,7 +32,7 @@ library(broom)
 
 # Tidy Meta-Analysis
 
-`tidymeta` is a toolkit for working with meta-analyses in R. Currently, it includes a data set, called `iud_cxca`, for a meta-analysis of the relationship between IUD use and cervical cancer. 
+`tidymeta` is a toolkit for working with meta-analyses in R. It includes a data set, called `iud_cxca`, for a meta-analysis of the relationship between IUD use and cervical cancer. 
 
 ```{r}
 iud_cxca
