@@ -9,5 +9,7 @@ visualization for PM 605: Systematic Review and Meta-Analysis.
 ## Resources:
 
 1.  Installing R and Rstudio: [PDF](r_instructions.pdf)
-2.  Slides: [HTML](ma_workshop.html), [Rmarkdown](ma_workshop.Rmd)
+2.  Slides:
+    [SpeakerDeck](https://speakerdeck.com/malcolmbarrett/introduction-to-data-visualization-for-meta-analysis),
+    [Rmarkdown](ma_workshop.Rmd)
 3.  Tutorial: [PDF](tidymeta.pdf)

@@ -22,20 +22,20 @@ library(mbmisc)
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2", "#E69F00")` and the `r font_col("tidyverse", "#E69F00")` are ideal for `r font_col("scientific communication", "#56B4E9")`
+## `r font_col("ggplot2", "#E69F00")` and the `r font_col("tidyverse", "#E69F00")` are `r font_col("friendly and consistent", "#56B4E9")` tools for data analysis ans visualization
 
 ---
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2 and the tidyverse are ideal for scientific communication", "#6C7B7F")`
+## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis ans visualization", "#6C7B7F")`
 ## `r font_col("Better plots", "#E69F00")` are `r font_col("better communication", "#56B4E9")`
 
 ---
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2 and the tidyverse are ideal for scientific communication", "#6C7B7F")`
+## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis ans visualization", "#6C7B7F")`
 ## `r font_col("Better plots are better communication", "#6C7B7F")`
 ## `r font_col("tidymeta", "#E69F00")` makes it easy to manipulate and plot meta-analysis results
 
@@ -268,6 +268,7 @@ background-position: 90% 10%
 ```{r fig.height=4}
 library(ggplot2)
 p <- ggplot(iud_cxca, aes(case_num + control_num, lnes, color = group))
+p
 ```
 ---
 
@@ -424,14 +425,14 @@ magick::image_append(c(
 ]
 
 ---
-# `r font_col("Tidy Meta-Analysis", "#E69F00")`
-## `meta_analysis()`
+# Tidy Meta-Analysis
+## `r font_col("<code>meta_analysis()</code>", "#E69F00")`
 
 
 ---
 
-# `r font_col("Tidy Meta-Analysis", "#E69F00")`
-## `meta_analysis()`
+# Tidy Meta-Analysis
+## `r font_col("<code>meta_analysis()</code>", "#E69F00")`
 
 ```{r}
 ma <- iud_cxca %>% 
@@ -442,12 +443,12 @@ ma
 ```
 
 ---
-# `r font_col("Forest Plot", "#E69F00")`
-## `forest_plot()`
+# Forest Plot
+## `r font_col("<code>forest_plot()</code>", "#E69F00")`
 
 ---
-# `r font_col("Forest Plot", "#E69F00")`
-## `forest_plot()`
+# Forest Plot
+## `r font_col("<code>forest_plot()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -455,7 +456,7 @@ ma %>%
 ```
 
 ---
-# `r font_col("Forest Plot", "#E69F00")`
+# Forest Plot
 ## `forest_plot()`
 
 ```{r eval=FALSE}
@@ -463,10 +464,10 @@ ma %>%
   forest_plot(group = group)
 ```
 
-## `text_table()`
+## `r font_col("<code>text_table()</code>", "#E69F00")`
 
 ---
-# `r font_col("Forest Plot", "#E69F00")`
+# Forest Plot
 ## `forest_plot()`
 
 ```{r eval=FALSE}
@@ -474,9 +475,8 @@ ma %>%
   forest_plot(group = group)
 ```
 
-## `text_table()`
+## `r font_col("<code>text_table()</code>", "#E69F00")`
 ```{r eval=FALSE}
-library(mbmisc)
 ma %>% 
   text_table(group = group, "Weights" = weight)
 ```
@@ -519,12 +519,12 @@ forest_plot() + text_table()
 ]
 
 ---
-# `r font_col("Funnel Plot", "#E69F00")`
-## `funnel_plot()`
+# Funnel Plot
+## `r font_col("<code>funnel_plot()</code>", "#E69F00")`
 
 ---
-# `r font_col("Funnel Plot", "#E69F00")`
-## `funnel_plot()`
+# Funnel Plot
+## `r font_col("<code>funnel_plot()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -532,12 +532,12 @@ ma %>%
 ```
 
 ---
-# `r font_col("Influence Plot", "#E69F00")`
-## `sensitivity()`
+# Influence Plot
+## `r font_col("<code>sensitivity()</code>", "#E69F00")`
 
 ---
-# `r font_col("Influence Plot", "#E69F00")`
-## `sensitivity()`
+# Influence Plot
+## `r font_col("<code>sensitivity()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -545,7 +545,7 @@ ma %>%
 ```
 
 ---
-# `r font_col("Influence Plot", "#E69F00")`
+# Influence Plot
 ## `sensitivity()`
 
 ```{r eval=FALSE}
@@ -553,11 +553,11 @@ ma %>%
   sensitivity(exponentiate = TRUE) 
 ```
 
-## `influence_plot()`
+## `r font_col("<code>influence_plot()</code>", "#E69F00")`
 
 ---
 
-# `r font_col("Influence Plot", "#E69F00")`
+# Influence Plot
 ## `sensitivity()`
 
 ```{r eval=FALSE}
@@ -565,7 +565,7 @@ ma %>%
   sensitivity(exponentiate = TRUE) 
 ```
 
-## `influence_plot()`
+## `r font_col("<code>influence_plot()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -574,12 +574,12 @@ ma %>%
 ```
 
 ---
-# `r font_col("Cumulative Plot", "#E69F00")`
-## `cumulative()`
+# Cumulative Plot
+## `r font_col("<code>cumulative()</code>", "#E69F00")`
 
 ---
-# `r font_col("Cumulative Plot", "#E69F00")`
-## `cumulative()`
+# Cumulative Plot
+## `r font_col("<code>cumulative()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -589,7 +589,7 @@ ma %>%
 
 ---
 
-# `r font_col("Cumulative Plot", "#E69F00")`
+# Cumulative Plot
 ## `cumulative()`
 
 ```{r eval=FALSE}
@@ -598,11 +598,11 @@ ma %>%
   cumulative(exponentiate = TRUE)
 ```
 
-## `cumulative_plot()`
+## `r font_col("<code>cumulative_plot()</code>", "#E69F00")`
 
 ---
 
-# `r font_col("Cumulative Plot", "#E69F00")`
+# Cumulative Plot
 ## `cumulative()`
 
 ```{r eval=FALSE}
@@ -611,7 +611,7 @@ ma %>%
   cumulative(exponentiate = TRUE)
 ```
 
-## `cumulative_plot()`
+## `r font_col("<code>cumulative_plot()</code>", "#E69F00")`
 
 ```{r eval=FALSE}
 ma %>% 
@@ -621,30 +621,106 @@ ma %>%
 ```
 
 ---
+# Importing Stata data, saving ggplots
+
+---
+
+# Importing Stata data, saving ggplots
+## `r font_col("haven", "#E69F00")`: `r font_col("<code>read_dta()</code>", "#56B4E9")`
+
+---
+
+# Importing Stata data, saving ggplots
+## `r font_col("haven", "#E69F00")`: `r font_col("<code>read_dta()</code>", "#56B4E9")`
+
+```{r eval = FALSE}
+library(haven)
+data <- read_dta("stata_data.dta")
+```
+
+---
+
+# Importing Stata data, saving ggplots
+## haven: `read_dta()`
+
+```{r eval = FALSE}
+library(haven)
+data <- read_dta("stata_data.dta")
+```
+
+## `r font_col("ggplot2", "#E69F00")`: `r font_col("<code>ggsave()</code>", "#56B4E9")`
+
+---
+
+
+# Importing Stata data, saving ggplots
+## haven: `read_dta()`
+
+```{r eval = FALSE}
+library(haven)
+data <- read_dta("stata_data.dta")
+```
+
+## `r font_col("ggplot2", "#E69F00")`: `r font_col("<code>ggsave()</code>", "#56B4E9")`
+
+```{r eval = FALSE}
+library(ggplot2)
+p <- forest_plot(ma, group = group)
+ggsave(p, "forest_plot.png", dpi = 320, height = 8)
+```
+
+---
+
 
 class: inverse, center
 
 # tidymeta
 
---
-## `meta_analysis()`
+---
 
---
-## `forest_plot()`/`text_table()`
+class: inverse, center
 
---
-## `sensitivity()`/`influence_plot()`
+# tidymeta
 
---
-## `cumulative()`/`cumulative_plot()`
+## `r font_col("<code>meta_analysis()/your_favorite_function() + tidy()</code>", "#E69F00")`
+
+---
+
+class: inverse, center
+
+# tidymeta
+
+## `meta_analysis()/your_favorite_function() + tidy()`
+## `r font_col("<code>forest_plot()/text_table()</code>", "#E69F00")`
+
+---
+
+class: inverse, center
+
+# tidymeta
+
+## `meta_analysis()/your_favorite_function() + tidy()`
+## `forest_plot()/text_table()`
+## `r font_col("<code>sensitivity()/influence_plot()</code>", "#E69F00")`
+
+---
+
+class: inverse, center
+
+# tidymeta
+
+## `meta_analysis()/your_favorite_function() + tidy()`
+## `forest_plot()/text_table()`
+## `sensitivity()/influence_plot()`
+## `r font_col("<code>cumulative()/cumulative_plot()</code>", "#E69F00")`
 
 ---
 class: inverse, center
 
 # Resources
-## [R for Data Science](http://r4ds.had.co.nz/): free online and in-print book
+## [R for Data Science](http://r4ds.had.co.nz/): A comprehensive but friendly introduction to the tidyverse. Free online.
 ## [DataCamp](https://www.datacamp.com/): ggplot2 courses and tidyverse courses
-## the [ggplot2 book](https://smile.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_2?ie=UTF8&qid=1524362742&sr=8-2&keywords=ggplot2)
+## [ggplot2: Elegant Graphics for Data Analysis](https://smile.amazon.com/ggplot2-Elegant-Graphics-Data-Analysis/dp/331924275X/ref=sr_1_2?ie=UTF8&qid=1524362742&sr=8-2&keywords=ggplot2): The official ggplot2 book
 
 ---
 
@@ -652,7 +728,7 @@ class: inverse, center, middle
 
 ![](https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif)
 
-## `r icon::fa("github")` [github.com/malcolmbarrett/tidymeta](https://github.com/malcolmbarrett/tidymeta)
-## `r icon::fa("github")` [github.com/malcolmbarrett/ma_viz_workshop](https://github.com/malcolmbarrett/ma_viz_workshop)
+### `r icon::fa("github")` [github.com/malcolmbarrett/tidymeta](https://github.com/malcolmbarrett/tidymeta)
+### `r icon::fa("github")` [github.com/malcolmbarrett/ma_viz_workshop](https://github.com/malcolmbarrett/ma_viz_workshop)
 
 Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
