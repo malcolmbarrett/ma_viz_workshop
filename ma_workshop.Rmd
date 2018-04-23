@@ -1,7 +1,7 @@
 ---
 title: "<span style='color:#474747'>Introduction to Data Visualization for Meta-Analysis</span>"
 subtitle: "<span style='color:#474747'>with tidymeta and ggplot2</span>"
-author: "<span style='color:#474747'>Malcolm Barrett</span>"
+author: "<span style='color:#474747'>Malcolm Barrett <br> Install R: [bit.ly/pm605_r](http://bit.ly/pm605_r) <br> Handout: [bit.ly/pm605_tut](http://bit.ly/pm605_tut)</span>"
 date: "<span style='color:#474747'>04/23/2018</span>"
 output:
   xaringan::moon_reader:
@@ -22,20 +22,20 @@ library(mbmisc)
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2", "#E69F00")` and the `r font_col("tidyverse", "#E69F00")` are `r font_col("friendly and consistent", "#56B4E9")` tools for data analysis ans visualization
+## `r font_col("ggplot2", "#E69F00")` and the `r font_col("tidyverse", "#E69F00")` are `r font_col("friendly and consistent", "#56B4E9")` tools for data analysis and visualization
 
 ---
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis ans visualization", "#6C7B7F")`
+## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis and visualization", "#6C7B7F")`
 ## `r font_col("Better plots", "#E69F00")` are `r font_col("better communication", "#56B4E9")`
 
 ---
 class: inverse-ns, center
 
 # Data Visualization with R
-## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis ans visualization", "#6C7B7F")`
+## `r font_col("ggplot2 and the tidyverse are friendly and consistent tools for data analysis and visualization", "#6C7B7F")`
 ## `r font_col("Better plots are better communication", "#6C7B7F")`
 ## `r font_col("tidymeta", "#E69F00")` makes it easy to manipulate and plot meta-analysis results
 
