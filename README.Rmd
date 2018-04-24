@@ -17,5 +17,6 @@ This repository includes files for the Spring 2018 workshop in data visualizatio
 
 ## Resources: 
 1. Installing R and Rstudio: [PDF](r_instructions.pdf)
-1. Slides: [SpeakerDeck](https://speakerdeck.com/malcolmbarrett/introduction-to-data-visualization-for-meta-analysis), [Rmarkdown](ma_workshop.Rmd)
+1. Slides: [HTML](https://htmlpreview.github.io/?https://github.com/malcolmbarrett/ma_viz_workshop/blob/master/ma_workshop.html), [SpeakerDeck](https://speakerdeck.com/malcolmbarrett/introduction-to-data-visualization-for-meta-analysis), [Rmarkdown](ma_workshop.Rmd)
 1. Tutorial: [PDF](tidymeta.pdf)
+1. Code from the live coding session: [live_code.R](live_code.R)
